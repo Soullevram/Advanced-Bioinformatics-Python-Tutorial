@@ -1,0 +1,258 @@
+#1. 
+
+def get_position_indices(triplet, dna):  
+    """
+    This function finds the presence/number of occurence of a triplet code within a DNA sequence
+
+    Parameters: 
+    triplet (str): 3-code sequence
+    DNA (str): The DNA sequence
+
+    Returns:
+    list: A list containing the index position where the triplet occurs in the DNA sequences
+    
+    """
+    # Create an empty list to store the resulting position/index list
+    position_list = []  
+    # Split the DNA sequence into 3-letter codes
+    triplet_list = [dna[i:i+3] for i in range(0, len(dna), 3)]  
+    # For loop to iterate through the DNA sequence
+    for x in range(0, len(triplet_list), 1):      
+        # If statement to check for the presence of the query triplet
+        if triplet == triplet_list[x]:            
+            # append the list position of the triplet if it is present
+            position_list.append(x) 
+    # return the output        
+    return position_list
+
+get_p = get_position_indices ('GAA', 'CCGGAAGAGCTTACTTAG')
+print (get_p)
+
+#2.
+
+# The phrase to search for
+phrase = "will"
+
+# The file to search in
+filename = "Downloads/conclusions.txt"
+
+try:
+    # Open the file
+    with open(filename, 'r') as grep_file:  
+        # For statement to iterate though the file, line by line, telling it to start at line 1, since there is no line 0
+        for line_number, line in enumerate(grep_file, start=1): 
+            # If statement to check if the query phrase is present in a line
+            if phrase in line: 
+                # Print the matching line with its number
+                print(f"Line {line_number}: {line.strip()}")  
+# If file does not exist: specific exception handler code
+except FileNotFoundError:
+    print(f"The file '{filename}' does not exist.")
+# General exception handler code
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+
+#3.
+
+def grep_python_cmd(phrase, filename):
+    """
+    Performs the same function as the UNIX grep command.
+
+    Parameters:
+    phrase (str): The phrase to search for.
+    filename (str): The filename (file path) to search in or iterate through.
+    """
+    # create an empty list to store each line where the hit occurs
+    hits = []
+    try:
+        # Open the file
+        with open(filename, 'r') as grep_file:  
+            # For statement to iterate through the file
+            for line_number, line in enumerate(grep_file, start=1): 
+                # If statement to check if the query phrase is present in a line
+                if phrase in line: 
+                    # Print the matching line with its number
+                    print(f"Line {line_number}: {line.strip()}")  
+                    hits.append(line.strip())  # Store the matching line in hits
+    # If file does not exist: specific exception handler code
+    except FileNotFoundError:
+        print(f"The file '{filename}' does not exist.")
+    # General exception handler code
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    
+    return hits 
+
+# The file to search in
+filename = "Downloads/conclusions.txt"
+
+# Example
+grep_python_cmd("will", filename)
+
+
+# 4.
+def dna_to_rna(dna_seq):
+    """
+    Converts DNA sequences to RNA
+
+    Function parameters:
+    dna_seq (str): DNA sequences
+
+    Returns:
+    RNA sequence
+    """
+    # Create a variable to hold the resulting RNA sequence 
+    rna_sequence = ""
+    # For Loop to iterate through the DNA sequence
+    for base in dna_seq:
+        # If statement to convert Thymine in DNA to Uracil
+        if base == 'T':
+            rna_sequence += 'U'
+        else:
+            rna_sequence += base
+    return rna_sequence
+
+# Example
+dna = "ATGCTGCATGCAAATCGCCTATCGTACTAGGCATGC"
+rna = dna_to_rna(dna)
+print(f"DNA: {dna}")
+print(f"RNA: {rna}")
+
+
+
+#5.
+
+# Paste the alignment from Canvas
+align ='''seq_1: ATGCGCTGCATGCATTGCATGCATG
+                 |||| || |||| ||||| || |||
+          seq_2: ATGCTCTCCATGTATTGCNTGGATG'''
+
+# Split the alignment into individual lines
+lines = align.split('\n')
+
+# Parse the sequences
+seq1 = lines[0].split(':')[1].strip()
+seq2 = lines[2].split(':')[1].strip()
+
+# Parse the sequence names
+name1 = lines[0].split(':')[0].strip()
+name2 = lines[2].split(':')[0].strip()
+
+# Create the FASTA format using the required symbols and line spacing
+fasta_content = f">{name1}\n{seq1}\n>{name2}\n{seq2}"
+
+# Save to a FASTA file
+output_file = "alignment.fasta"
+with open(output_file, "w") as fasta_align:
+    fasta_align.write(fasta_content)
+
+print(f"FASTA file saved as {output_file}")
+
+#6.
+# sample sequence
+cyt_b = "TTTTTGAGGAGCTACTGTAATTACAAATTTAATATCAGCAATTCCATTAATTGGTAATGAAATTGTAACTTGATTATGAGGAGGATTTAGAGTTAATAATGCAACATTAAATCGATTTTACTCTTTACATTTTATTATACCATTTGTAATTTTAATAATAATTTTAATCCATTTAATAACTTTACATTTAACAGGGTCTAACAATCCTTTAGGAACAAATAGAAATTTATATAAAATTCCTTTTCATTTTTATTTTACAGTAAAAGATATACAAGGGTTTTTATTTATAATTGTTAGATTATTATTATTATGTTGTTTTATTCCTTATATTTTAGGAGATCCAGAAAATTTTAATATAGCTAATCCAATAATTACTCCCATTCATATTCAGCCTGAATGATATTTCTTATTTGCATATGCAATTTTACGATCA"
+
+# To extract index position 100 and 150 (inclusive)
+extracted_section = cyt_b[99:150]  
+print("Extracted section:", extracted_section)
+
+
+#7. 
+
+def calculate_similarity(string1, string2):
+    """
+    Function to compare two strings and calculate the similarity score.
+
+    Parameters:
+    string1 (str): The first string to compare.
+    string2 (str): The second string to compare.
+
+    Returns:
+    float: The similarity score.
+    """
+    # A crude comparison, which is what I did requires both sequences (str) to have
+    # the same length, else one'd need to factor in things like gaps, gap penalty, and gap extension
+    if len(string1) != len(string2):
+        raise ValueError("Strings must be of the same length.")
+
+    # Count the number of exact positional matches
+    matches = sum(1 for a, b in zip(string1, string2) if a == b)
+
+    # Calculate the similarity score as the proportion of invariant sites
+    similarity_score = matches / len(string1) # the length of either string could be used, seeing as they're similar
+
+    return similarity_score
+
+# Example usage
+string_1 = 'AGGAGGCGGCGTGGTGCGTACGATGCGCAGGGTATTCACTAGAAAGCTAG'
+string_2 = 'CCTCTCTGGCTGACCTCCATAGCTCCTAAGGGGCGATGGAGGGCTCCAAG'
+
+similarity = calculate_similarity(string_1, string_2)
+print(f"Similarity score: {similarity}")
+
+#8.
+It's saying I don't have access to view this resource.
+
+
+#9. 
+# Create function
+def RE_sequence (sequence, enzyme):
+    """
+    Cuts the given DNA sequence at restriction enzyme sites and returns a list of fragment lengths.
+    
+    Parameters 
+    sequence (str): The DNA sequence to be cut.
+    enzyme (str): The restriction site (string) where the enzyme cuts.
+    
+    Returns:
+    List of fragment lengths.
+    """
+    # Split/cut the dna sequence at the enzyme recognition site
+    fragments = sequence.split(enzyme)  
+    # Estimate the fragment length as a list
+    fragment_lengths = [len(fragment) for fragment in fragments]  
+    
+    return fragment_lengths
+
+# Example
+seq_1 = "ATGCGTCGTCTGACGTATCCCTGTGCAAGTCATCCGTCGTCTGACGTATCTCTGTGCATGTCATAAGTCGTCTGACGTATCGGTGTGCCCGTCATGCGTCGTCTGACGTATGCGTGTGCAAGTCATATTTCGTCTGACGTATCACTGTGCAGGTCAGGGGTCGTCTGACGTATTTTTGTGCACGTC"
+enzyme = "TAT"
+
+fragment_lengths = RE_sequence (seq_1, enzyme)
+print(fragment_lengths)
+
+#10.
+# List variables containing the names and the correspoding ages
+names_list = ['Jim', 'Jeff', 'Geoff', 'Grace', 'George', 'Julie', 'Justine', 'Jemima']
+age_list = ['22', '34', '46', '58', '70', '19', '35', '64']
+
+# Create a function to combine both names and ages in both Lists
+def combine_lists(list1, list2):
+    """
+    A function to combine the name and corresponding age of each individual from 2 lists
+
+    Parameters:
+    list1: a list containing the names
+    list2: a list containing the ages
+
+    Returns:
+    A dictionary containing the name as the key and the age as the value
+    """
+    # If statement to ensure that both lists are of the same length or size
+    if len(list1) != len(list2):
+        raise ValueError("Lists must have the same size") # error message if the sizes differ
+    # Else statement to iterate through the lists if they're of similar sizes
+    else:
+        # create an empty dictionary to store the output
+        comb_dict = {}
+        # For loop to iterate through list1 index positions starting from the position zero or the first index 
+        # through the entire length of list1
+        for x in range(0, len(list1), 1):
+            # list1 is defined as the Key, while list2 is defined as the value
+            comb_dict[list1[x]] = (list2[x])
+        # returns the dictionary
+    return comb_dict
+
+# the function is called using the name list and age list 
+combine_lists(names_list, age_list)

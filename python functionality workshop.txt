@@ -1,0 +1,151 @@
+# Question 1
+
+## Write a programme (or script) that will produce a list of sequence headers from a multi-fasta file.
+# Creates a function to extract headers
+def extract_headers(fasta_file):
+    # creates a variable called Header
+    headers = []
+    # Use with function to access file
+    with open(fasta_file, 'r') as file:
+        for line in file:
+            # If statement to select the lines starting with ">"
+            if line.startswith('>'):
+                headers.append(line.strip().lstrip('>'))  # Remove whitespaces and > sign
+    return headers
+
+# Function parameters
+fasta_file = "Downloads/workshop_data.fasta"
+
+# Apply function to the header variable
+headers = extract_headers(fasta_file)
+
+# Print the list
+print(headers)
+
+# Question 2
+
+## Using the header list you created in question 1, number the sequence headers alphabetically.
+# Create a counter variable
+count = 0
+# For loop to check each line in the list
+for items in sorted(headers):
+    # Statement to ensure that the counter iterates over itself, with the lowest value been 0
+    count = count + 1
+    # Print results
+    print(count, items)
+
+# Question 3
+
+# Create an empty dictionary to store the sequences
+seq_dict = {}
+
+# Access the fasta file
+with open("Downloads/workshop_data.fasta", "r") as fastafile:
+    # Create a variable to hold the current header
+    header = None
+    # Create a list to hold the sequence lines
+    sequence = []  
+
+    # For statement to examine each line in the file
+    for line in fastafile:
+        # Remove any whitespace
+        line = line.strip() 
+        # If statement to check if the line is a header
+        if line.startswith(">"):  
+            # If the line is an header, save the sequence to the header variable
+            if header is not None:  
+                # Join the sequence list into a string
+                seq_dict[header] = ''.join(sequence)  
+            # remove the '>' character
+            header = line[1:] 
+            # Reset the sequence list for the new header
+            sequence = []  
+        # Else statement
+        else:
+            # Add the line to the sequence list
+            sequence.append(line)  
+
+    # Add the last sequence after the loop
+    if header is not None:
+        seq_dict[header] = ''.join(sequence)
+
+# Now seq_dict contains the headers and their corresponding sequences
+# Print the dictionary to verify its contents
+print(seq_dict) 
+
+# Question 4
+
+## Re-write your code from question 3, so that it takes the form of a function.
+
+# Create a function to convert fasta files into a dictionary
+def fasta_to_dict(fasta_file):
+    """
+    Reads a FASTA file and creates a dictionary with headers as keys and sequences as values.
+
+    Function Parameters:
+    fasta_file (str): Where "str" is the FASTA file path.
+
+    Returns:
+    dict: A dictionary with headers as keys and sequences as values.
+    """
+    # Create an empty dictionary to store the sequences
+    seq_dict = {}
+
+    # Access the fasta file
+    with open(fasta_file, "r") as fastafile:
+        # create a variable to hold the current header
+        header = None  
+        # Create a list to hold the sequence lines
+        sequence = []  
+
+        # For Loop to read the lines
+        for line in fastafile:
+            # Remove any whitespace
+            line = line.strip() 
+            # If statement to check if the line is a header
+            if line.startswith(">"):
+                # If the line is an header, save the sequence to the header variable
+                if header is not None: 
+                    # Join the sequence list into a string
+                    seq_dict[header] = ''.join(sequence)  
+                # Remove the '>' character
+                header = line[1:]
+                # Reset the sequence list for the new header
+                sequence = [] 
+            # Else statement
+            else:
+                # Add the line variables to the sequence list
+                sequence.append(line)  
+
+        # Add the last sequence after the loop
+        if header is not None:
+            seq_dict[header] = ''.join(sequence)
+
+    # Return the dictionary
+    return seq_dict  
+
+# Test function 
+fasta_dict = fasta_to_dict("Downloads/workshop_data.fasta")
+print(fasta_dict) 
+
+# Question 5
+
+## How would you access individual elements of a dictionary created through the function you wrote in question 4?
+
+# The fasta-file-into-dictionary function has been used to create a variable "fasta_dict"
+
+# Method 1
+# Use For loop to access the keys
+for elements in fasta_dict.keys():
+    # Print results, which includes the keys and values
+    print(elements, fasta_dict[items])
+	
+# Method 2
+# Use dict.items function to access the dictionary as a tuple
+print(fasta_dict.items())
+
+# Method 3
+# Use for loop to access both keys and values of the dictionary via the dict.item function.
+for k, v in fasta_dict.items():
+    # Print statement which uses an equal to sign to join keys and values
+    print(k, "=", v)

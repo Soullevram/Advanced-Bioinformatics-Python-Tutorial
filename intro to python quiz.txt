@@ -1,0 +1,96 @@
+# Question 1
+# Price of one bottle of milk
+milk_price = 1.50
+
+# Prompt the user to enter an amount of money
+money_needed = float(input("Enter the amount of money you have: "))
+
+# Calculate the number of bottles they can afford
+bottles = int(money_needed // milk_price)
+
+# Calculate the extra money needed for another bottle
+extra_money_needed = milk_price - (money_needed % milk_price)
+
+# Output the results
+print(f"You can afford {bottles} bottles of milk.")
+if extra_money_needed <= 0:
+    print("You have enough money for another bottle!")
+else:
+    print(f"You need £{extra_money_needed:.2f} more for another bottle.")
+
+
+# Question 2
+
+for j in range (100, -1, -2):
+    print (j)
+
+# Question 3
+
+# To Calculate the GC percentage
+sequence="ACTGCGCGTCAGTCTACGTAG"
+
+# Create a variable to store the GC counts
+
+GC_count = (sequence.count("G") + sequence.count("C"))
+
+# Convert it to percentage
+GC_percent = GC_count / len (sequence) * 100
+
+# Print results in 2 dp
+print(f"GC Percent: {GC_percent:.2f}%")
+# Or
+print(int(GC_percent))
+
+# Questions 4
+
+# To calculate the GC content of each sequence in the fasta file
+with open("Downloads/workshop_data.fasta", "r") as fasta_file:
+    # For Loop to iterate the headers
+    for lines in fasta_file:
+        # if statement to print only lines starting with ">"
+        if lines.startswith(">"):
+            print ("sequence name is", lines)
+        # Else statement to calculate GC content of each sequence   
+        else:
+            GC_count = (lines.count("G") + lines.count("C"))
+            print((GC_count/len(lines))*100)
+       
+# Question 5
+
+# generate a list of sequence names which only contain the gene name (i.e. "AT1G04130")
+with open("Downloads/workshop_data.fasta", "r") as fasta_file:
+    # For loop
+    for lines in fasta_file:
+        # If statement to read only the headers
+        if lines.startswith('>'):
+            # to split the underscore 
+            header = lines.split('_')
+            # to split and strip the > and . symbols
+            print(header[0].split('.')[0].lstrip('>'))
+
+# Questions 6
+
+# Define the function to make the query
+def count_headers_with_phrase(fasta_file, phrase):
+    # Create a variable counter
+    count = 0
+    # open the fasta file
+    with open(fasta_file, 'r') as file:
+        # Write a for loop
+        for line in file:
+            # To remove unwanted whitespace characters in the 'line' variable 
+            line = line.strip()
+            # If statement to check if the header contains the "pop3"
+            if line.startswith(">") and phrase in line: 
+                count += 1
+    return count
+
+# Function parameters
+fasta_file = "Downloads/workshop_data.fasta"  
+phrase = "pop3"
+
+# Create result variable
+result = count_headers_with_phrase(fasta_file, phrase)
+
+# Print results
+print(f"Number of headers containing '{phrase}': {result}")
